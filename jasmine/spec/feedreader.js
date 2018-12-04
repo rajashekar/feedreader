@@ -15,18 +15,18 @@
 
     // test every feed has url defined and is not empty
     it('has feed url defined', () => {
-      for (const feed of allFeeds) {
+      allFeeds.forEach(feed => {
         expect(feed.url).toBeDefined();
-        expect(feed.url).not.toBe('');
-      }
+        expect(feed.url).toBeTruthy();
+      });
     });
 
     // test if every feed has name and is not empty
     it('has feed name defined', () => {
-      for (const feed of allFeeds) {
+      allFeeds.forEach(feed => {
         expect(feed.name).toBeDefined();
-        expect(feed.name).not.toBe('');
-      }
+        expect(feed.name).toBeTruthy();
+      });
     });
   });
 
@@ -35,15 +35,15 @@
   describe('The menu', () => {
     // test if menu is hidden by default
     it('has menu hidden by default', () => {
-      expect($('body').hasClass('menu-hidden')).toBe(true);
+      expect(document.body.classList.contains('menu-hidden')).toBe(true);
     });
 
     // test menu visibility
     it('has menu visibility', () => {
       $('.menu-icon-link').trigger('click');
-      expect($('body').hasClass('menu-hidden')).toBe(false);
+      expect(document.body.classList.contains('menu-hidden')).toBe(false);
       $('.menu-icon-link').trigger('click');
-      expect($('body').hasClass('menu-hidden')).toBe(true);
+      expect(document.body.classList.contains('menu-hidden')).toBe(true);
     });
   });
 
@@ -56,8 +56,8 @@
       })
     });
     it('calls loadFeed and has single .entry', done => {
-      // check if we have atleast one entry
-      expect($('.entry-link').length).not.toBeLessThan(1);
+      // check if we have atleast one entry in feed container
+      expect($('.feed .entry-link').length).not.toBeLessThan(1);
       done();
     });
   });
@@ -65,11 +65,18 @@
   /* Test suite for "New Feed Selection" */
   describe('New Feed Selection', () => {
     // by default 0th feed is loaded, so grab title
-    let defaultTitle = allFeeds[0].name;
+    let firstLoadFeed, secondLoadFeed;
     beforeEach(done => {
-      // change the feed to second one
-      loadFeed(1, () => {
-        done();
+      // load first feed
+      loadFeed(0, () => {
+        // get the first feed content
+        firstLoadFeed = $('.feed').html();
+        // load second feed
+        loadFeed(1, () => {
+          // get the second feed content
+          secondLoadFeed = $('.feed').html();
+          done();
+        });
       });
     });
     afterEach(done => {
@@ -80,7 +87,7 @@
     });
     it('changes content on new feed', done => {
       // check if content got changed.
-      expect($('.header-title').html()).not.toEqual(defaultTitle);
+      expect(firstLoadFeed).not.toEqual(secondLoadFeed);
       done();
     });
   });
