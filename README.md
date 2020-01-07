@@ -1,5 +1,5 @@
 # Feed Reader Project
-This Project is done as part of Udacity Front end Web developer course. The purpose of the project is to understand the concepts of test-driven development using Jasmine library. 
+The purpose of the project is to understand the concepts of test-driven development using Jasmine library. 
 
 ## Table of Contents
 
